@@ -1,0 +1,34 @@
+import os
+import subprocess
+import logging
+
+
+LOCAL_DIR = '/path/to/local/directory'
+REMOTE_SERVER = 'username@remote_server_ip:/path/to/remote/directory'
+LOG_FILE = 'backup.log'
+
+
+logging.basicConfig(filename=LOG_FILE, level=logging.INFO)
+
+def backup():
+    try:
+        
+        tarball = f'{LOCAL_DIR}.tar.gz'
+        subprocess.run(['tar', '-czf', tarball, LOCAL_DIR])
+
+        
+        subprocess.run(['rsync', '-avz', tarball, REMOTE_SERVER])
+
+        
+        os.remove(tarball)
+
+        logging.info('Backup successful')
+    except Exception as e:
+        logging.error(f'Backup failed: {str(e)}')
+
+if __name__ == '__main__':
+    backup()
+
+
+SAVING THE SCRIPT AS:
+backup_script.py
